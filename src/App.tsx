@@ -23,7 +23,6 @@ export default function App() {
   const [result, setResult] = useState<FilaAdocaoData | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isTemplateMode, setIsTemplateMode] = useState(false);
 
   const formatDocument = (value: string) => {
     const digits = value.replace(/\D/g, "");
@@ -109,81 +108,8 @@ export default function App() {
     }
   };
 
-  if (isTemplateMode) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center p-4 md:p-8 relative overflow-hidden">
-        {/* Floating Toggle Back Button - Won't be visible in a cropped screenshot */}
-        <Button 
-          variant="outline" 
-          onClick={() => setIsTemplateMode(false)}
-          className="absolute top-4 right-4 z-50 opacity-20 hover:opacity-100 transition-opacity"
-        >
-          Sair do Modo Design
-        </Button>
-
-        <header className="w-full max-w-4xl mb-8 flex flex-col md:flex-row items-center justify-between gap-6 opacity-100">
-          <div className="flex items-stretch gap-4 md:gap-5">
-            <div className="w-[100px] h-[100px] md:w-[128px] md:h-[128px] shrink-0 bg-seagri-primary rounded-2xl md:rounded-[24px] flex items-center justify-center text-white shadow-lg p-3 md:p-5">
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Bras%C3%A3o_do_Distrito_Federal_%28Brasil%29.svg" 
-                alt="Brasão do Distrito Federal" 
-                className="w-full h-full object-contain drop-shadow-sm"
-              />
-            </div>
-            <div className="flex flex-col justify-between py-1">
-              <div>
-                <h1 className="text-[22px] md:text-[32px] font-display font-bold text-[#05234D] tracking-tight leading-none mb-1">
-                  Secretaria de Agricultura
-                </h1>
-                <h2 className="text-xs md:text-[17px] text-slate-800 font-normal tracking-wide leading-none mb-3.5">
-                  Abastecimento e Desenvolvimento Rural
-                </h2>
-                <p className="text-xs md:text-[16px] font-bold text-[#05234D] tracking-tight">
-                  SUPROA - Subsecretaria de Proteção aos Animais de Produção
-                </p>
-              </div>
-              <div className="mt-auto pt-2">
-                <div className="inline-flex items-center gap-2 bg-seagri-primary/10 text-seagri-primary px-3 py-1.5 rounded-full text-xs md:text-[13px] font-bold w-fit">
-                  <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-seagri-primary" />
-                  Lista de Espera: Adoção de Animais
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        <main className="w-full max-w-4xl space-y-6">
-          {/* Search Area Placeholder */}
-          <Card className="border-none shadow-xl shadow-slate-200/50 overflow-hidden h-32">
-            <div className="h-2 bg-gradient-to-r from-seagri-dark via-seagri-secondary to-seagri-primary" />
-          </Card>
-
-          {/* Result Area Placeholder */}
-          <Card className="border-none shadow-2xl shadow-seagri-primary/5 overflow-hidden min-h-[400px]">
-            <div className="bg-gradient-to-br from-seagri-dark to-seagri-secondary h-40" />
-            <CardContent className="p-0 h-full">
-              <div className="grid grid-cols-1 md:grid-cols-2 h-full">
-                <div className="p-8 space-y-8 border-r border-slate-100 h-full" />
-                <div className="p-8 bg-slate-50/50 h-full" />
-              </div>
-            </CardContent>
-          </Card>
-        </main>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center p-4 md:p-8 relative">
-      {/* Power BI Export Button */}
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => setIsTemplateMode(true)}
-        className="absolute top-2 right-2 text-[10px] text-slate-400 hover:text-seagri-primary uppercase tracking-tighter"
-      >
-        Gerar Fundo Power BI
-      </Button>
       {/* Header Section */}
       <header className="w-full max-w-4xl mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-stretch gap-4 md:gap-5">
