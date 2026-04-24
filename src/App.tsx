@@ -240,7 +240,6 @@ export default function App() {
                 </Label>
                 <Input
                   id="documento"
-                  placeholder="000.000.000-00 ou 00.000.000/0000-00"
                   value={documento}
                   onChange={handleDocumentChange}
                   className="text-lg h-12 border-slate-200 focus:ring-seagri-primary focus:border-seagri-primary"
