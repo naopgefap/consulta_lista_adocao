@@ -19,32 +19,44 @@ interface FilaAdocaoData {
 }
 
 export default function App() {
-  const [cpf, setCpf] = useState("");
+  const [documento, setDocumento] = useState("");
   const [result, setResult] = useState<FilaAdocaoData | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isTemplateMode, setIsTemplateMode] = useState(false);
 
-  const formatCPF = (value: string) => {
+  const formatDocument = (value: string) => {
     const digits = value.replace(/\D/g, "");
-    return digits
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d{1,2})/, "$1-$2")
-      .replace(/(-\d{2})\d+?$/, "$1");
+    
+    if (digits.length <= 11) {
+      // Máscara de CPF
+      return digits
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})/, "$1-$2")
+        .replace(/(-\d{2})\d+?$/, "$1");
+    } else {
+      // Máscara de CNPJ
+      return digits
+        .replace(/(\d{2})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1/$2")
+        .replace(/(\d{4})(\d)/, "$1-$2")
+        .replace(/(-\d{2})\d+?$/, "$1");
+    }
   };
 
-  const handleCpfChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatCPF(e.target.value);
-    if (formatted.length <= 14) {
-      setCpf(formatted);
+  const handleDocumentChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatDocument(e.target.value);
+    if (formatted.length <= 18) {
+      setDocumento(formatted);
       setError(null);
     }
   };
 
   const handleSearch = async () => {
-    if (cpf.length < 14) {
-      setError("Por favor, insira um CPF válido.");
+    if (documento.length !== 14 && documento.length !== 18) {
+      setError("Por favor, insira um CPF ou CNPJ válido.");
       return;
     }
 
@@ -75,7 +87,7 @@ export default function App() {
       });
 
       const rows: any[] = parseResult.data;
-      const found = rows.find(row => row['CPF'] === cpf);
+      const found = rows.find(row => row['CPF'] === documento);
 
       if (found) {
         setResult({
@@ -87,7 +99,7 @@ export default function App() {
           obs: found['Observações'] || 'Sem observações'
         });
       } else {
-        setError("Nenhum registro encontrado para este CPF na fila de espera.");
+        setError("Nenhum registro encontrado para este documento na fila de espera.");
       }
     } catch (err) {
       console.error("Erro ao buscar dados:", err);
@@ -217,20 +229,20 @@ export default function App() {
               Consulta de Posição
             </CardTitle>
             <CardDescription>
-              Digite seu CPF para verificar sua situação na fila de espera.
+              Digite o CPF ou CNPJ para verificar a situação na fila de espera.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 space-y-2">
-                <Label htmlFor="cpf" className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  CPF do Requerente
+                <Label htmlFor="documento" className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  CPF / CNPJ do Requerente
                 </Label>
                 <Input
-                  id="cpf"
-                  placeholder="000.000.000-00"
-                  value={cpf}
-                  onChange={handleCpfChange}
+                  id="documento"
+                  placeholder="000.000.000-00 ou 00.000.000/0000-00"
+                  value={documento}
+                  onChange={handleDocumentChange}
                   className="text-lg h-12 border-slate-200 focus:ring-seagri-primary focus:border-seagri-primary"
                 />
               </div>
@@ -358,7 +370,7 @@ export default function App() {
                 <User size={40} />
               </div>
               <p className="text-center max-w-xs font-medium">
-                Aguardando consulta. Insira seu CPF acima para ver os detalhes.
+                Aguardando consulta. Insira o CPF ou CNPJ acima para ver os detalhes.
               </p>
             </motion.div>
           )}
